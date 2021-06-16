@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import  Constants  from 'expo-constants';
 import TopBar from './components/TopBar'
@@ -7,11 +7,11 @@ import SwipeableImage from './components/SwipeableImage';
 import BottomBar from './components/BottomBar';
 import Swipes from './components/Swipes';
 
-
 export default function App() {
 
   const [users, setUsers] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
+  const swipesRef = useRef(null)
 
   async function fetchUsers(){
     try {
@@ -29,7 +29,6 @@ export default function App() {
   }, [])
 
   function handleLike(){
-    console.log('hi')
     nextUser()
   }
 
@@ -38,11 +37,11 @@ export default function App() {
   }
 
   function handleDissPress(){ 
-    
+    swipesRef.current.openRight()
   }
 
-  function handleDissPress(){ 
-    
+  function handleLikePress(){ 
+    swipesRef.current.openLeft()
   }
 
   function nextUser(){
@@ -56,10 +55,10 @@ export default function App() {
       <View style={styles.swipes}>
         {users.length > 1 && users.map((u,i) => 
         currentIndex === i &&(
-          <Swipes key={i} currentIndex={currentIndex} users={users} handleLike={handleLike} handleDiss={handleDiss}/>
+          <Swipes ref={swipesRef} key={i} currentIndex={currentIndex} users={users} handleLike={handleLike} handleDiss={handleDiss}/>
         ))}
       </View>
-      <BottomBar />
+      <BottomBar handleDissPress={handleDissPress} handleLikePress={handleLikePress}/>
     </View>
   );
 }
@@ -83,3 +82,4 @@ const styles = StyleSheet.create({
     elevation: 7
   }
 });
+
