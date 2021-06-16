@@ -4,6 +4,8 @@ import  Constants  from 'expo-constants';
 import TopBar from './components/TopBar'
 import axios from 'axios'
 import SwipeableImage from './components/SwipeableImage';
+import BottomBar from './components/BottomBar';
+import Swipes from './components/Swipes';
 
 
 export default function App() {
@@ -25,15 +27,39 @@ export default function App() {
   useEffect(() => {
     fetchUsers()
   }, [])
+
+  function handleLike(){
+    console.log('hi')
+    nextUser()
+  }
+
+  function handleDiss(){ 
+    nextUser()
+  }
+
+  function handleDissPress(){ 
+    
+  }
+
+  function handleDissPress(){ 
+    
+  }
+
+  function nextUser(){
+    const nextIndex = users.length - 2 === currentIndex ? 0 : currentIndex + 1
+    setCurrentIndex(nextIndex)
+  }
   
   return (
     <View style={styles.container}>
       <TopBar />
       <View style={styles.swipes}>
-        {users.length > 1 && (
-          <SwipeableImage user={users[currentIndex]} />
-        )}
+        {users.length > 1 && users.map((u,i) => 
+        currentIndex === i &&(
+          <Swipes key={i} currentIndex={currentIndex} users={users} handleLike={handleLike} handleDiss={handleDiss}/>
+        ))}
       </View>
+      <BottomBar />
     </View>
   );
 }
